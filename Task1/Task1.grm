@@ -1,0 +1,74 @@
+"Author" = 'Mohamed Fadl'
+
+"Start Symbol" = <main>
+               
+!--------------Terminal--------------------
+Id= ('_'|'$'|{letter}){alphanumeric}*
+Digit = ('+'|'-')?{digit}+ (','{digit}+)? (('e' | ('+'|'-')?{digit}+) '^' ('+'|'-')?{digit}+ (','{digit}+)?)?
+!---------------Rules-------------------
+<main> ::= 'Start' <Body> 'End' 
+     
+<Body> ::= <concept>
+        |<concept><body>
+        
+<concept> ::= <assign>
+           |<declaration>
+           |<cond>
+           |<repeat>
+           |<function_dec>
+           |<function-call>
+           
+<assign> ::=<id>'='<expr>
+          
+<id>::=Id
+     
+<expr> ::=<expr>'+'<term>
+        |<expr>'-'<term>
+        |<term>
+        
+<term> ::=<term>'*'<factor>
+        |<term>'/'<factor>
+        |<factor>
+        
+<factor> ::=<factor>'**'<exp>
+          |<exp>
+          
+<exp> ::='('<expr>')'
+       |<id>
+       |<digit>
+       
+
+<digit> ::= Digit
+         
+!--------Condittion--------
+<cond> ::=if'('<con>')' <Body> 
+        |if'('<con>')'<Body> else <cond>
+        
+<con> ::=<expr><op><expr>
+       
+<op> ::= '<' | '>' | '==' | '!='
+      
+!-------repeat----
+<repeat> ::= rep'('<data><assign> ';' <con> ';' <step>')' '{'<Body>'}'
+          
+<data> ::=int | string | float
+        
+<step> ::= '--'<id>
+        |'++'<id>
+        |<assign>
+ !-------------declaration------------
+
+<declaration> ::= <data><assign>     
+!------function_stm------
+
+<function_dec> ::=func <data-Type><name>'('<parameter>')''{'<Body> ret <id>'}'
+
+<name> ::= <id>
+<data-Type> ::= <data>
+               
+<parameter> ::= <data><id>
+             |<data><id>','<parameter>
+!---------------------Method-call-----------------
+
+<function-call> ::= <name> '('<parameter>')'
+
